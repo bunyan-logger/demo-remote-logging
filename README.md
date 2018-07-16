@@ -133,7 +133,7 @@ appear in both global nodes.
   `regional.exs`, and `global.exs` in the `config/` directory.
 
 * To use the Bunyan logger in your application, have a look at the
-  [documentation](https://github.com/bunyan-logger/bunyan).
+  [documentation](https://github.com/bunyan-logger/bunyan/blob/master/README.md).
 
 * Bunyan is designed to be extended using plugins. You can add new
   sources of log messages (it comes with sources that p rovide a
