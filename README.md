@@ -1,8 +1,9 @@
-# RemoteLogging
+# Remote Logging
 
-A simple demo of remote logging.
+A simple demo of remote logging using the
+[Bunyan](https://github.com/bunyan-logger/bunyan) logger.
 
-Open three terminals in this direcory.
+Open three terminals in this directory.
 
 In the first, issue the following command:
 
@@ -117,7 +118,7 @@ and watch the log messages appear.
 
 ## And Then...
 
-While the tree nodes are running, start another global node. You'll need
+While the three nodes are running, start another global node. You'll need
 to call it `global1` (or anything else starting "global").
 
 
@@ -132,9 +133,7 @@ appear in both global nodes.
   `regional.exs`, and `global.exs` in the `config/` directory.
 
 * To use the Bunyan logger in your application, have a look at the
-  documentation at
-
-  # TODO: missing link
+  [documentation](https://github.com/bunyan-logger/bunyan).
 
 * Bunyan is designed to be extended using plugins. You can add new
   sources of log messages (it comes with sources that p rovide a
