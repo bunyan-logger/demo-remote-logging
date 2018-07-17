@@ -13,9 +13,9 @@ config :bunyan,
         { Bunyan.Writer.Device, name: :console_logger },
         {
           Bunyan.Writer.Device,
-              name:     :error_log_writer,
-              path:     "./error.log",
-              pid_file: "./error_log_writer.pid",
+              name:          :error_log_writer,
+              device:        "./error.log",
+              pid_file_name: "./error_log_writer.pid",
         },
        ]
 

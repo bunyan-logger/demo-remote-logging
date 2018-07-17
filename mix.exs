@@ -16,8 +16,8 @@ defmodule RemoteLogging.MixProject do
 
   defp deps do
     [
-     bunyan: ">= 0.0.0",
-     # { :bunyan, path: "../bunyan", env: Mix.env },
+#     bunyan: ">= 0.0.0",
+      { :bunyan, path: "../bunyan", env: Mix.env },
     ]
   end
 end
