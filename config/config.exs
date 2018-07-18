@@ -12,14 +12,16 @@ case node() |> to_string() do
   import_config "global.exs"
 
 _ ->
-  IO.puts """
+  unless hd(System.argv) =~ ~r/deps\./ do
+    IO.puts """
 
-  To run this demo, you need to specify nodes:
+    To run this demo, you need to specify nodes:
 
-      $ iex --name global@127.0.0.1     -S mix run
-      $ iex --name regionalal@127.0.0.1 -S mix run
-      $ iex --name local@127.0.0.1      -S mix run
+        $ iex --name global@127.0.0.1     -S mix run
+        $ iex --name regionalal@127.0.0.1 -S mix run
+        $ iex --name local@127.0.0.1      -S mix run
 
-  """
-  :erlang.halt
+    """
+    :erlang.halt
+  end
 end

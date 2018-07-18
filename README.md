@@ -3,13 +3,20 @@
 A simple demo of remote logging using the
 [Bunyan](https://github.com/bunyan-logger/bunyan) logger.
 
+First, fetch dependencies.
+
+    # mix deps.get
+
 Open three terminals in this directory.
 
 In the first, issue the following command:
 
     $ iex --name global@127.0.0.1 -S mix run
 
-In the second, run
+(You will get 4 warnings when the `demo.ex` module compiles. That's
+because it deliberately contains code that will cause runtime errors.)
+
+In the second terminal, run
 
     $ iex --name regional@127.0.0.1 -S mix run
 
@@ -20,31 +27,51 @@ And finally, in the third
 The node names are important, as they help the demo configure the
 logger.
 
+## OK, Now What
+
+Go the the terminal that's running the local node, and keep the other
+two windows visible.
+
+In the local iex session, run
+
+~~~ elixir
+iex> require Bunyan
+iex> import  Bunyan
+iex> debug  "a debug message in local"
+iex> info   "and then an info message", answer: 42, helpful: false
+iex> warn   "don't panic"
+iex> error  fn -> System.user_home end, args: System.argv
+~~~
+
+and watch the log messages appear.
+
+Do the same in the other sessions.
+
 ## What You Just Configured
 
 We now have three applications running, each on its own node.
 
 * The `local` node is configured to write its log messages to the
-  console, and also to forward them to the `regional` node. Here's its
-  configuration:
+  console, and also to forward messages at the info level or greater to
+  the `regional` node. Here's its configuration:
 
   ~~~ elixir
   config :bunyan,
-         read_from: [
-           Bunyan.Source.Api,
-           Bunyan.Source.ErlangErrorLogger,
-         ],
-         write_to: [
-           Bunyan.Writer.Device,
-           {
-             Bunyan.Writer.Remote,
-               send_to:      :regional_logger,
-               send_to_node: :"regional@127.0.0.1"
-           },
-         ]
+        read_from: [
+          Bunyan.Source.Api,
+          Bunyan.Source.ErlangErrorLogger,
+        ],
+        write_to: [
+          Bunyan.Writer.Device,
+          {
+            Bunyan.Writer.Remote,
+              runtime_log_level: :info,
+              send_to:           :regional_logger,
+          },
+       ]
   ~~~
 
-* The `regional` node also writes its log messages to the konsole. It is
+* The `regional` node also writes its log messages to the console. It is
   also configured to received messages from `local`, so it will log
   these as well. Finally, the regional node forwards all `:warn` and
   `:error` messages to the global node.
@@ -74,7 +101,7 @@ We now have three applications running, each on its own node.
   ~~~
 
 
-* The `global` node reports all its messages to the konsole, and logs
+* The `global` node reports all its messages to the console, and logs
   `:error` level messages to the file `./error.log`.
 
   ~~~ elixir
@@ -98,23 +125,6 @@ We now have three applications running, each on its own node.
 ![diagram showing the three nodes and the messages displayed and saved
 on each](./assets/images/bunyan-demo-flow.svg)
 
-## Sure It Does... Prove It
-
-Go the the terminal that's running the local node, and keep the other
-two windows visible.
-
-In the iex session, run
-
-~~~ elixir
-iex> require Bunyan
-iex> import  Bunyan
-iex> debug  "a debug message in local"
-iex> info   "and then an info message", answer: 42, helpful: false
-iex> warn   "don't panic"
-iex> error  fn -> System.user_home end, args: System.argv
-~~~
-
-and watch the log messages appear.
 
 ## And Then...
 
@@ -126,6 +136,14 @@ to call it `global1` (or anything else starting "global").
 
 Back in the local node, generate some log messages: you should see them
 appear in both global nodes.
+
+
+### The Regional and Global Loggers Seem to Lag...
+
+Good eye! When you use a remote logger, Bunyan attempts to reduce
+network overhead by batching log messages. What you're seeing is the
+default 200ms batching timeout. You can adjust both this timeout and the
+maximum batch size in the configuration.
 
 ## Next Steps...
 

@@ -22,7 +22,7 @@ defmodule RemoteLogging do
 
     Application.get_env(:remote_logging, :connect_to, [])
     |> Enum.each(fn name ->
-          IO.inspect { :"#{name}@#{my_host}", Node.connect(:"#{name}@#{my_host}") }
+          Node.connect(:"#{name}@#{my_host}")
        end)
 
   end

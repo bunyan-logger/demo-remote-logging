@@ -20,8 +20,10 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-remote_logging-*.tar
+remote*.tar
 
 /.elixir_ls/
 /.vscode/
-mix.lock
+
+error.log
+error_log_writer.pid

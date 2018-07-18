@@ -9,8 +9,8 @@ config :bunyan,
          Bunyan.Writer.Device,
          {
            Bunyan.Writer.Remote,
-             send_to:      :regional_logger,
-             send_to_node: :"regional@127.0.0.1"
+             runtime_log_level: :info,
+             send_to:           :regional_logger,
          },
        ]
 
